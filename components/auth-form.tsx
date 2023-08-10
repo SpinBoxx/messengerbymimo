@@ -19,19 +19,20 @@ import { useState } from "react";
 import { Separator } from "./ui/separator";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
 
 type Variant = "LOGIN" | "REGISTER";
 
 export default function AuthForm() {
-  const [variant, setvariant] = useState<Variant>("LOGIN");
+  const [variant, setVariant] = useState<Variant>("LOGIN");
   const submitLabel = variant === "LOGIN" ? "Sign in" : "Sign up";
   const [loading, setLoading] = useState(false);
 
   const toggleVariant = () => {
     if (variant === "LOGIN") {
-      setvariant("REGISTER");
+      setVariant("REGISTER");
     } else {
-      setvariant("LOGIN");
+      setVariant("LOGIN");
     }
   };
 
@@ -53,23 +54,34 @@ export default function AuthForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     setLoading(true);
-    console.log(values);
     if (variant === "REGISTER") {
       axios
         .post("/api/register", values)
-        .then((response) => {
+        .then(() => {
           toast.success("Account created with success.");
+          form.reset();
+          setVariant("LOGIN");
         })
         .catch((error) => {
-          console.log(error.response.data.message);
-
           toast.error(error.response.data.message);
-        })
-        .finally(() => {
-          setLoading(false);
         });
     } else {
+      signIn("credentials", {
+        ...values,
+        redirect: false,
+      }).then((callback) => {
+        console.log(callback);
+        if (callback?.error) {
+          console.log(callback.error);
+          toast.error(callback.error);
+        }
+
+        if (callback?.ok && !callback.error) {
+          toast.success("Logged in");
+        }
+      });
     }
+    setLoading(false);
   }
   return (
     <Card className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

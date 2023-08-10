@@ -1,6 +1,6 @@
 "use client";
 
-import { Github, X } from "lucide-react";
+import { Github, Loader, Loader2, X } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -25,6 +25,7 @@ type Variant = "LOGIN" | "REGISTER";
 export default function AuthForm() {
   const [variant, setvariant] = useState<Variant>("LOGIN");
   const submitLabel = variant === "LOGIN" ? "Sign in" : "Sign up";
+  const [loading, setLoading] = useState(false);
 
   const toggleVariant = () => {
     if (variant === "LOGIN") {
@@ -51,6 +52,7 @@ export default function AuthForm() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setLoading(true);
     console.log(values);
     if (variant === "REGISTER") {
       axios
@@ -62,6 +64,9 @@ export default function AuthForm() {
           console.log(error.response.data.message);
 
           toast.error(error.response.data.message);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
     }
@@ -124,8 +129,8 @@ export default function AuthForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              {submitLabel}
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? <Loader2 className="animate-spin" /> : submitLabel}
             </Button>
           </form>
         </Form>

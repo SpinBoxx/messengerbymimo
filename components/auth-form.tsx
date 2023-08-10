@@ -17,6 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 type Variant = "LOGIN" | "REGISTER";
 
@@ -50,6 +52,19 @@ export default function AuthForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+    if (variant === "REGISTER") {
+      axios
+        .post("/api/register", values)
+        .then((response) => {
+          toast.success("Account created with success.");
+        })
+        .catch((error) => {
+          console.log(error.response.data.message);
+
+          toast.error(error.response.data.message);
+        });
+    } else {
+    }
   }
   return (
     <Card className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

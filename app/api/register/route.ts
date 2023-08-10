@@ -17,6 +17,17 @@ export async function POST(req: Request) {
     );
 
   const hashedPassword = await bcrypt.hash(password, 12);
+  const userAlreadyExist = await prismadb.user.findMany({
+    where: {
+      email,
+    },
+  });
+
+  if (userAlreadyExist.length !== 0)
+    return NextResponse.json(
+      { message: "User with this email already exist." },
+      { status: 400 }
+    );
   const user = await prismadb.user.create({
     data: {
       email,

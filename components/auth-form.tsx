@@ -15,11 +15,12 @@ import { Button } from "@/components/ui/button";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Separator } from "./ui/separator";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type Variant = "LOGIN" | "REGISTER";
 
@@ -27,6 +28,14 @@ export default function AuthForm() {
   const [variant, setVariant] = useState<Variant>("LOGIN");
   const submitLabel = variant === "LOGIN" ? "Sign in" : "Sign up";
   const [loading, setLoading] = useState(false);
+  const session = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session.status === "authenticated") {
+      router.push("/users");
+    }
+  }, [session.status]);
 
   const toggleVariant = () => {
     if (variant === "LOGIN") {
@@ -61,26 +70,34 @@ export default function AuthForm() {
           toast.success("Account created with success.");
           form.reset();
           setVariant("LOGIN");
+          signIn("credentials", values);
         })
         .catch((error) => {
           toast.error(error.response.data.message);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
       signIn("credentials", {
         ...values,
         redirect: false,
-      }).then((callback) => {
-        console.log(callback);
-        if (callback?.error) {
-          toast.error(callback.error);
-        }
+      })
+        .then((callback) => {
+          console.log(callback);
+          if (callback?.error) {
+            toast.error(callback.error);
+          }
 
-        if (callback?.ok && !callback.error) {
-          toast.success("Logged in");
-        }
-      });
+          if (callback?.ok && !callback.error) {
+            toast.success("Logged in");
+            router.push("/users");
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
-    setLoading(false);
   }
 
   const onSocialLogin = (social: "github" | "google") => {

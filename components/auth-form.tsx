@@ -72,7 +72,6 @@ export default function AuthForm() {
       }).then((callback) => {
         console.log(callback);
         if (callback?.error) {
-          console.log(callback.error);
           toast.error(callback.error);
         }
 
@@ -83,6 +82,26 @@ export default function AuthForm() {
     }
     setLoading(false);
   }
+
+  const onSocialLogin = (social: "github" | "google") => {
+    setLoading(true);
+
+    signIn(social, {
+      redirect: false,
+    }).then((callback) => {
+      console.log(callback);
+      if (callback?.error) {
+        toast.error(callback.error);
+      }
+
+      if (callback?.ok && !callback.error) {
+        toast.success("Logged in");
+      }
+    });
+
+    setLoading(false);
+  };
+
   return (
     <Card className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <CardContent className="mt-6">
@@ -152,7 +171,10 @@ export default function AuthForm() {
             <Separator className="w-2/5 justify-self-end" />
           </div>
           <div className="flex justify-around">
-            <Button className="w-1/3 bg-slate-800">
+            <Button
+              className="w-1/3 bg-slate-800"
+              onClick={() => onSocialLogin("github")}
+            >
               <Github className="mr-2 h-5 w-5" /> Github
             </Button>
             <Button className="w-1/3 bg-slate-800">

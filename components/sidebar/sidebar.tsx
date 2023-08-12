@@ -10,7 +10,7 @@ interface Props {
 export default async function Sidebar({ children }: Props) {
   const currentUser = await getCurrentUser();
   return (
-    <div className="h-full bg-slate-400">
+    <div className="h-full bg-white">
       <DesktopSidebar user={currentUser!} />
       <MobileFooter />
       <main className="h-full lg:pl-20">{children}</main>

@@ -38,7 +38,7 @@ export default function DesktopSidebar({ user }: Props) {
           className="relative transition hover:cursor-pointer hover:opacity-75"
         >
           <Avatar className="relative">
-            <AvatarImage src={user.image} />
+            <AvatarImage src={user.image || "/images/user-ano.jpg"} />
             <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
           </Avatar>
           <span className="absolute -right-0 top-0 h-3 w-3 rounded-full border border-white bg-green-500"></span>

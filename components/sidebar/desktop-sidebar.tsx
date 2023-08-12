@@ -14,7 +14,6 @@ interface Props {
 export default function DesktopSidebar({ user }: Props) {
   const routes = useRoutes();
   const [open, setOpen] = useState(false);
-  console.log({ user });
 
   return (
     <div className="hidden justify-between lg:fixed lg:inset-0 lg:left-0 lg:z-40 lg:flex lg:w-20 lg:flex-col lg:overflow-y-auto lg:border-r lg:bg-white lg:px-6 lg:pb-4">
@@ -38,7 +37,7 @@ export default function DesktopSidebar({ user }: Props) {
           className="relative transition hover:cursor-pointer hover:opacity-75"
         >
           <Avatar className="relative">
-            <AvatarImage src={user.image || "/images/user-ano.jpg"} />
+            <AvatarImage src={user.image ?? "/images/user-ano.jpg"} />
             <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
           </Avatar>
           <span className="absolute -right-0 top-0 h-3 w-3 rounded-full border border-white bg-green-500"></span>

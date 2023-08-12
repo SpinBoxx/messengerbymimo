@@ -177,7 +177,10 @@ export default function AuthForm() {
             >
               <Github className="mr-2 h-5 w-5" /> Github
             </Button>
-            <Button className="w-1/3 bg-slate-800">
+            <Button
+              className="w-1/3 bg-slate-800"
+              onClick={() => onSocialLogin("google")}
+            >
               <svg
                 className="mr-2 h-5 w-5 fill-white"
                 xmlns="http://www.w3.org/2000/svg"
@@ -198,9 +201,7 @@ export default function AuthForm() {
           </span>
           <span className="cursor-pointer underline" onClick={toggleVariant}>
             {" "}
-            {variant === "LOGIN"
-              ? "New to messenger ?"
-              : "Aleardy have an account ?"}
+            {variant === "LOGIN" ? "Create an account" : "Sign in"}
           </span>
         </div>
       </CardContent>

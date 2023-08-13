@@ -1,6 +1,10 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar-dot";
 import { User } from "@prisma/client";
 import axios from "axios";
 import { useRouter } from "next/navigation";

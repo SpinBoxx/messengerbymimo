@@ -7,7 +7,11 @@ import useOtherUser from "@/hooks/use-other-user";
 import { useSession } from "next-auth/react";
 import { useCallback, useMemo } from "react";
 import clsx from "clsx";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  AvatarDot,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar-dot";
 
 interface Props {
   conversation: FullConversationType;
@@ -64,10 +68,10 @@ export default function ConversationBox({ conversation, selected }: Props) {
       )}
       onClick={handleClick}
     >
-      <Avatar>
+      <AvatarDot>
         <AvatarImage src={otherUser.image || "/images/user-ano.jpg"} />
         <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
-      </Avatar>
+      </AvatarDot>
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div className="mb-1 flex items-center justify-between">

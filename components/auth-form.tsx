@@ -84,7 +84,6 @@ export default function AuthForm() {
         redirect: false,
       })
         .then((callback) => {
-          console.log(callback);
           if (callback?.error) {
             toast.error(callback.error);
           }
@@ -106,7 +105,7 @@ export default function AuthForm() {
     signIn(social, {
       redirect: false,
     }).then((callback) => {
-      console.log(callback);
+    
       if (callback?.error) {
         toast.error(callback.error);
       }

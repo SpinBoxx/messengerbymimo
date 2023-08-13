@@ -4,7 +4,7 @@ import useRoutes from "@/hooks/use-routes";
 import { useState } from "react";
 import DesktopRoute from "./desktop-route";
 import { User } from "@prisma/client";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AvatarDot, AvatarFallback } from "@/components/ui/avatar-dot";
 import { AvatarImage } from "@radix-ui/react-avatar";
 
 interface Props {
@@ -36,11 +36,10 @@ export default function DesktopSidebar({ user }: Props) {
           onClick={() => setOpen(true)}
           className="relative transition hover:cursor-pointer hover:opacity-75"
         >
-          <Avatar className="relative">
+          <AvatarDot className="relative">
             <AvatarImage src={user.image ?? "/images/user-ano.jpg"} />
             <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
-          </Avatar>
-          <span className="absolute -right-0 top-0 h-3 w-3 rounded-full border border-white bg-green-500"></span>
+          </AvatarDot>
         </div>
       </nav>
     </div>

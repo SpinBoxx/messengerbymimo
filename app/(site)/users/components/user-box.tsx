@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Avatar,
+  AvatarDot,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar-dot";
@@ -37,13 +37,10 @@ export default function UserBox({ user }: Props) {
       onClick={handleClick}
       className="relative flex w-full items-center space-x-3 rounded-lg bg-white p-3 transition hover:cursor-pointer hover:bg-neutral-200"
     >
-      <div className="relative">
-        <Avatar>
-          <AvatarImage src={user.image || "/images/user-ano.jpg"} />
-          <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
-        </Avatar>
-        <span className="absolute -right-0 -top-1 h-3 w-3 rounded-full border border-white bg-green-500"></span>
-      </div>
+      <AvatarDot>
+        <AvatarImage src={user.image || "/images/user-ano.jpg"} />
+        <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
+      </AvatarDot>
 
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">

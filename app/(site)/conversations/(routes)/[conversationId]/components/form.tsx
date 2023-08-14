@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { Image, Plane, SendHorizonal } from "lucide-react";
+import { CldUploadButton } from "next-cloudinary";
+import { toast } from "react-hot-toast";
 
 export default function FormComponent() {
   const { conversationId } = useConversation();
@@ -44,9 +46,32 @@ export default function FormComponent() {
     });
   }
 
+  const handleUpload = (result: any) => {
+    axios
+      .post("/api/messages", {
+        image: result.info.secure_url,
+        conversationId,
+      })
+      .then((response) => {
+        if (response.status !== 201) {
+          toast.error(response.data.message);
+        }
+      })
+      .catch((error) => {
+        toast.error(error.response.data.message);
+      });
+  };
+
   return (
     <div className="flex w-full items-center gap-2 border-t bg-white p-4 lg:gap-4">
-      <Image className="h-7 w-7 text-sky-500" />
+      <CldUploadButton
+        options={{ maxFiles: 1 }}
+        onUpload={handleUpload}
+        uploadPreset="cq7k3a5q"
+      >
+        <Image className="h-7 w-7 text-sky-500" />
+      </CldUploadButton>
+
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

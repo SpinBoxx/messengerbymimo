@@ -45,11 +45,7 @@ export default function ConversationBox({ conversation, selected }: Props) {
     // if the current logged user saw the last message
     // Filter the seenArray to find if the current logged user are in
     // If not return false, if yes return true
-    return (
-      seenArray.filter((user) => {
-        user.email === userEmail;
-      }).length !== 0
-    );
+    return seenArray.filter((user) => user.email === userEmail).length !== 0;
   }, [userEmail, lastMessage]);
 
   const lastMessageText = useMemo(() => {
@@ -87,7 +83,7 @@ export default function ConversationBox({ conversation, selected }: Props) {
           <p
             className={clsx(
               "truncate text-sm",
-              hasSeen ? "text-gray-900" : "font-medium text-black"
+              hasSeen ? "text-gray-500" : "font-medium text-black"
             )}
           >
             {lastMessageText}

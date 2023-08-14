@@ -10,6 +10,12 @@ export async function POST(req: Request) {
   if (!currentUser?.id || !currentUser?.email)
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
+  if (!conversationId)
+    return NextResponse.json(
+      { message: "Conversation id is required" },
+      { status: 400 }
+    );
+
   const newMessage = await prismadb.message.create({
     data: {
       body: message,

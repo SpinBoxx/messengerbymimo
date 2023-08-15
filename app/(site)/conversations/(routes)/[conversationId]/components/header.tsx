@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import AvatarGroup from "@/components/ui/avatar-group";
+import { ConfirmDialog } from "@/app/(site)/conversations/(routes)/[conversationId]/components/confirm-dialog";
 
 interface Props {
   conversation: Conversation & {
@@ -84,16 +85,18 @@ export default function Header({ conversation }: Props) {
                   <span className="text-sembold">{otherUser.name}</span>
                   <span className="text-sm text-gray-500">{statusText}</span>
                 </div>
-                <div className="ml-auto flex cursor-pointer flex-col items-center">
-                  <Button
-                    className="h-fit w-fit rounded-full bg-gray-200 p-2.5 text-red-500 hover:bg-gray-300"
-                    size="icon"
-                  >
-                    <Trash className="h-4 w-4" />
-                  </Button>
+                <ConfirmDialog>
+                  <div className="ml-auto flex cursor-pointer flex-col items-center">
+                    <Button
+                      className="h-fit w-fit rounded-full bg-gray-200 p-2.5 text-red-500 hover:bg-gray-300"
+                      size="icon"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
 
-                  <span className="text-red-500">Delete</span>
-                </div>
+                    <span className="text-red-500">Delete</span>
+                  </div>
+                </ConfirmDialog>
               </div>
             </div>
             <Separator />

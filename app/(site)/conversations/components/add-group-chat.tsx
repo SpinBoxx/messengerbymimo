@@ -110,11 +110,13 @@ export function DialogAddGroupChat({ users }: Props) {
                   <FormControl>
                     <Select
                       components={animatedComponents}
-                      onChange={(value) =>
-                        setValue("members", value, {
+                      onChange={(value) => {
+                        const mutableArray: { value: string; label: string }[] =
+                          value as { value: string; label: string }[];
+                        setValue("members", mutableArray, {
                           shouldValidate: true,
-                        })
-                      }
+                        });
+                      }}
                       options={users.map((user) => ({
                         value: user.id,
                         label: user.name!,

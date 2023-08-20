@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { ModalImage } from "./image-modal";
 
 interface Props {
   isLast?: boolean;
@@ -49,13 +50,15 @@ export default function MessageBox({ message, isLast }: Props) {
         </div>
         <div className={messageDiv}>
           {message.image ? (
-            <Image
-              src={message.image}
-              height="288"
-              width="288"
-              alt="Image message"
-              className="translate cursor-pointer object-cover transition hover:scale-110"
-            />
+            <ModalImage image={message.image}>
+              <Image
+                src={message.image}
+                height="288"
+                width="288"
+                alt="Image message"
+                className="translate cursor-pointer object-cover transition hover:scale-110"
+              />
+            </ModalImage>
           ) : (
             <div>{message.body}</div>
           )}

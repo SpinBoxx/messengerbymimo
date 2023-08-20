@@ -12,6 +12,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar-dot";
+import AvatarGroup from "@/components/ui/avatar-group";
 
 interface Props {
   conversation: FullConversationType;
@@ -64,10 +65,15 @@ export default function ConversationBox({ conversation, selected }: Props) {
       )}
       onClick={handleClick}
     >
-      <AvatarDot>
-        <AvatarImage src={otherUser.image || "/images/user-ano.jpg"} />
-        <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
-      </AvatarDot>
+      {conversation.isGroup ? (
+        <AvatarGroup users={conversation.users} />
+      ) : (
+        <AvatarDot>
+          <AvatarImage src={otherUser.image || "/images/user-ano.jpg"} />
+          <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
+        </AvatarDot>
+      )}
+
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <div className="mb-1 flex items-center justify-between">

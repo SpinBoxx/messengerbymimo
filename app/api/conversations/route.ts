@@ -12,7 +12,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   if (isGroup && (!members || members.length < 2 || !name))
-    return NextResponse.json({ message: "Invalid data" }, { status: 400 });
+    return NextResponse.json(
+      { message: "Members need to be at least 2" },
+      { status: 400 }
+    );
 
   if (isGroup) {
     const newConversation = await prismadb.conversation.create({

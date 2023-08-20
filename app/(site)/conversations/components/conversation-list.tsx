@@ -7,12 +7,18 @@ import { UserPlus2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ConversationBox from "./conversation-box";
+import { DialogAddGroupChat } from "./add-group-chat";
+import { User } from "@prisma/client";
 
 interface Props {
   initialConversations: FullConversationType[];
+  users: User[];
 }
 
-export default function ConversationsList({ initialConversations }: Props) {
+export default function ConversationsList({
+  initialConversations,
+  users,
+}: Props) {
   const [conversations, setConversations] = useState(initialConversations);
   const router = useRouter();
   const { conversationId, isOpen } = useConversation();
@@ -27,9 +33,7 @@ export default function ConversationsList({ initialConversations }: Props) {
       <div className="px-5 ">
         <div className="mb-4 flex items-center justify-between pt-4">
           <div className="text-2xl font-bold text-neutral-800">Messages</div>
-          <div className="cursor-pointer rounded-full bg-gray-100 p-2 text-gray-600 transition hover:opacity-75">
-            <UserPlus2 />
-          </div>
+          <DialogAddGroupChat users={users} />
         </div>
         {initialConversations.map((conversation) => (
           <ConversationBox

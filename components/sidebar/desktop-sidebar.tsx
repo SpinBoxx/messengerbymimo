@@ -7,6 +7,7 @@ import { User } from "@prisma/client";
 import { AvatarDot, AvatarFallback } from "@/components/ui/avatar-dot";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { ModalProfile } from "../modal-profile";
+import { useSession } from "next-auth/react";
 
 interface Props {
   user: User;
@@ -15,6 +16,7 @@ interface Props {
 export default function DesktopSidebar({ user }: Props) {
   const routes = useRoutes();
   const [open, setOpen] = useState(false);
+  const session = useSession();
 
   return (
     <div className="hidden justify-between lg:fixed lg:inset-0 lg:left-0 lg:z-40 lg:flex lg:w-20 lg:flex-col lg:overflow-y-auto lg:border-r lg:bg-white lg:px-6 lg:pb-4">

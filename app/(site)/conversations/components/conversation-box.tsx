@@ -68,7 +68,7 @@ export default function ConversationBox({ conversation, selected }: Props) {
       {conversation.isGroup ? (
         <AvatarGroup users={conversation.users} />
       ) : (
-        <AvatarDot>
+        <AvatarDot user={otherUser}>
           <AvatarImage src={otherUser.image || "/images/user-ano.jpg"} />
           <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
         </AvatarDot>

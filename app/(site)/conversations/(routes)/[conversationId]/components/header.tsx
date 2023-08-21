@@ -20,6 +20,7 @@ import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import AvatarGroup from "@/components/ui/avatar-group";
 import { ConfirmDialog } from "@/app/(site)/conversations/(routes)/[conversationId]/components/confirm-dialog";
+import useActiveList from "@/hooks/user-active-list";
 
 interface Props {
   conversation: Conversation & {
@@ -29,13 +30,14 @@ interface Props {
 
 export default function Header({ conversation }: Props) {
   const otherUser = useOtherUser(conversation);
-
+  const { members } = useActiveList();
+  const isActive = members.indexOf(otherUser?.email!) !== -1;
   const statusText = useMemo(() => {
     if (conversation.isGroup) {
       return `${conversation.users.length} members`;
     }
-    return "Active";
-  }, [conversation]);
+    return isActive ? "Active" : "Offline";
+  }, [conversation, isActive]);
 
   const joinedDate = useMemo(() => {
     return format(new Date(otherUser.createdAt), "PP");
@@ -50,7 +52,7 @@ export default function Header({ conversation }: Props) {
         >
           <ChevronLeft className="h-8 w-8" />
         </Link>
-        <AvatarDot>
+        <AvatarDot user={otherUser}>
           <AvatarImage src={otherUser.image!} />
           <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
         </AvatarDot>
@@ -75,7 +77,7 @@ export default function Header({ conversation }: Props) {
                 {conversation.isGroup ? (
                   <AvatarGroup users={conversation.users} />
                 ) : (
-                  <AvatarDot>
+                  <AvatarDot user={otherUser}>
                     <AvatarImage src={otherUser.image!} />
                     <AvatarFallback>{otherUser.name?.at(0)}</AvatarFallback>
                   </AvatarDot>

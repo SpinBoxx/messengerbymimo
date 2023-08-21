@@ -11,7 +11,6 @@ interface Body {
 
 export async function DELETE(req: Request, { params }: Body) {
   const currentUser = await getCurrentUser();
-  console.log(params);
 
   const { conversationId } = params;
 

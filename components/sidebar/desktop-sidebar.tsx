@@ -37,7 +37,7 @@ export default function DesktopSidebar({ user }: Props) {
       <nav className="mt-4 flex flex-col items-center justify-between">
         <div className="relative transition hover:cursor-pointer hover:opacity-75">
           <ModalProfile currentUser={user}>
-            <AvatarDot className="relative">
+            <AvatarDot user={user} className="relative">
               <AvatarImage src={user.image ?? "/images/user-ano.jpg"} />
               <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
             </AvatarDot>

@@ -36,7 +36,7 @@ export default function MessageBox({ message, isLast }: Props) {
   return (
     <div className={container}>
       <div className={avatar}>
-        <AvatarDot>
+        <AvatarDot user={message.sender}>
           <AvatarImage src={message.sender.image || "/images/user-ano.jpg"} />
           <AvatarFallback>{message.sender.name?.at(0)}</AvatarFallback>
         </AvatarDot>

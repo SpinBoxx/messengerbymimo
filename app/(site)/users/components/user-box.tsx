@@ -37,7 +37,7 @@ export default function UserBox({ user }: Props) {
       onClick={handleClick}
       className="relative flex w-full items-center space-x-3 rounded-lg bg-white p-3 transition hover:cursor-pointer hover:bg-neutral-200"
     >
-      <AvatarDot>
+      <AvatarDot user={user}>
         <AvatarImage src={user.image || "/images/user-ano.jpg"} />
         <AvatarFallback>{user.name?.at(0)}</AvatarFallback>
       </AvatarDot>

@@ -54,6 +54,8 @@ export default function FormComponent() {
       .then((response) => {
         if (response.status !== 201) {
           toast.error(response.data.message);
+        } else {
+          form.reset();
         }
       })
       .catch((error) => {

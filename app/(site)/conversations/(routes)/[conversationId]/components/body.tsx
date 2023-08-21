@@ -23,6 +23,14 @@ export default function Body({ initialMessages }: Props) {
   }, [conversationId]);
 
   useEffect(() => {
+    bottomRef?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+      inline: "nearest",
+    });
+  }, []);
+
+  useEffect(() => {
     pusherClient.subscribe(conversationId);
     const messageHandler = (message: FullMessageType) => {
       axios.post(`/api/conversations/${conversationId}/seen`);
@@ -32,8 +40,8 @@ export default function Body({ initialMessages }: Props) {
         }
         return [...current, message];
       });
-      bottomRef?.current?.scrollIntoView();
     };
+
     const updateMessageHandler = (newMessage: FullMessageType) => {
       setMessages((current) =>
         current.map((currentMessage) => {
@@ -43,6 +51,11 @@ export default function Body({ initialMessages }: Props) {
           return currentMessage;
         })
       );
+      bottomRef?.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
     };
 
     pusherClient.bind("messages:new", messageHandler);
@@ -64,7 +77,7 @@ export default function Body({ initialMessages }: Props) {
           isLast={messages.length - 1 === index}
         />
       ))}
-      <div ref={bottomRef} className="pt-24"></div>
+      <div ref={bottomRef} className="pt-1"></div>
     </div>
   );
 }

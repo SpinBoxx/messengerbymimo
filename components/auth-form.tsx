@@ -35,7 +35,7 @@ export default function AuthForm() {
     if (session.status === "authenticated") {
       router.push("/users");
     }
-  }, [session.status]);
+  }, [session.status, router]);
 
   const toggleVariant = () => {
     if (variant === "LOGIN") {
@@ -105,7 +105,6 @@ export default function AuthForm() {
     signIn(social, {
       redirect: false,
     }).then((callback) => {
-    
       if (callback?.error) {
         toast.error(callback.error);
       }

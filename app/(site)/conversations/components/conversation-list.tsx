@@ -5,10 +5,13 @@ import { FullConversationType } from "@/types";
 import clsx from "clsx";
 import { UserPlus2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ConversationBox from "./conversation-box";
 import { DialogAddGroupChat } from "./add-group-chat";
 import { User } from "@prisma/client";
+import { useSession } from "next-auth/react";
+import { pusherClient } from "@/app/lib/pusher";
+import { find } from "lodash";
 
 interface Props {
   initialConversations: FullConversationType[];
@@ -20,8 +23,53 @@ export default function ConversationsList({
   users,
 }: Props) {
   const [conversations, setConversations] = useState(initialConversations);
+  const session = useSession();
   const router = useRouter();
   const { conversationId, isOpen } = useConversation();
+  const pusherKey = useMemo(() => {
+    return session.data?.user?.email;
+  }, [session.data?.user?.email]);
+
+  useEffect(() => {
+    if (!pusherKey) return;
+
+    pusherClient.subscribe(pusherKey);
+    const newHandler = (conversation: FullConversationType) => {
+      setConversations((current) => {
+        if (find(current, { id: conversation.id })) {
+          return current;
+        }
+        return [conversation, ...current];
+      });
+    };
+    const updateHandler = (conversation: FullConversationType) => {
+      setConversations((current) =>
+        current.map((currentConv) => {
+          if (currentConv.id === conversation.id) {
+            return { ...currentConv, messages: conversation.messages };
+          }
+          return currentConv;
+        })
+      );
+    };
+    const removeHandler = (conversation: FullConversationType) => {
+      setConversations((current) => {
+        return [...current.filter((conv) => conv.id !== conversation.id)];
+      });
+      if (conversationId === conversation.id) {
+        router.push("/conversation");
+      }
+    };
+    pusherClient.bind("conversation:new", newHandler);
+    pusherClient.bind("conversation:update", updateHandler);
+    pusherClient.bind("conversation:remove", removeHandler);
+    return () => {
+      pusherClient.unsubscribe(pusherKey);
+      pusherClient.unbind("conversation:new", newHandler);
+      pusherClient.unbind("conversation:update", updateHandler);
+      pusherClient.unbind("conversation:remove", removeHandler);
+    };
+  }, [pusherKey, conversationId, router]);
 
   return (
     <aside
@@ -35,7 +83,7 @@ export default function ConversationsList({
           <div className="text-2xl font-bold text-neutral-800">Messages</div>
           <DialogAddGroupChat users={users} />
         </div>
-        {initialConversations.map((conversation) => (
+        {conversations.map((conversation) => (
           <ConversationBox
             key={conversation.id}
             conversation={conversation}

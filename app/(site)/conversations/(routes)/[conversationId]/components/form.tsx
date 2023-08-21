@@ -39,10 +39,18 @@ export default function FormComponent() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    axios.post("/api/messages", {
-      ...values,
-      conversationId,
-    });
+    axios
+      .post("/api/messages", {
+        ...values,
+        conversationId,
+      })
+      .then((response) => {
+        if (response.status !== 201) {
+          toast.error(response.data.message);
+        } else {
+          form.reset();
+        }
+      });
   }
 
   const handleUpload = (result: any) => {
@@ -54,8 +62,6 @@ export default function FormComponent() {
       .then((response) => {
         if (response.status !== 201) {
           toast.error(response.data.message);
-        } else {
-          form.reset();
         }
       })
       .catch((error) => {

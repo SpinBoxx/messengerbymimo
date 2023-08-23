@@ -2,7 +2,7 @@
 
 import useConversation from "@/hooks/use-conversation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -17,12 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import { Image, Plane, SendHorizonal } from "lucide-react";
+import { Image, Loader2, Plane, SendHorizonal } from "lucide-react";
 import { CldUploadButton } from "next-cloudinary";
 import { toast } from "react-hot-toast";
 
 export default function FormComponent() {
   const { conversationId } = useConversation();
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     message: z.string().min(1),
@@ -39,6 +40,7 @@ export default function FormComponent() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setLoading(true);
     axios
       .post("/api/messages", {
         ...values,
@@ -49,6 +51,7 @@ export default function FormComponent() {
           toast.error(response.data.message);
         } else {
           form.reset();
+          setLoading(false);
         }
       });
   }
@@ -100,16 +103,22 @@ export default function FormComponent() {
               </FormItem>
             )}
           />
-          <Button
-            size="icon"
-            className="rounded-full bg-sky-500"
-            variant="default"
-          >
-            <SendHorizonal
-              strokeWidth={4}
-              className="h-5 w-5 fill-white text-white"
-            />
-          </Button>
+          {loading ? (
+            <Loader2 className="h-8 w-8 animate-spin" />
+          ) : (
+            <Button
+              size="icon"
+              className="h-10 w-10 flex-none rounded-full bg-sky-500"
+              variant="default"
+              type="submit"
+              disabled={loading}
+            >
+              <SendHorizonal
+                // strokeWidth={4}
+                className="h-4 w-4 fill-white text-white"
+              />
+            </Button>
+          )}
         </form>
       </Form>
     </div>
